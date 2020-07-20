@@ -74,10 +74,10 @@ void zk_base::zk_delete(zhandle_t* handle,const char* path,int version)
 //类外定义加static会有二义性，可能表明为仅仅本文件可用
 void zk_base::watcher_global(zhandle_t* handle,int type,int state,const char* path,void* context)
 {
-    std::cout <<"zookpeer init"<<std::endl;
-    std::cout<<"type:"<<type<<std::endl;
-    std::cout<<"state:"<<state<<std::endl;
-    std::cout<<"context:"<<context<<std::endl;
+    // std::cout <<"zookpeer init"<<std::endl;
+    // std::cout<<"type:"<<type<<std::endl;
+    // std::cout<<"state:"<<state<<std::endl;
+    // std::cout<<"context:"<<context<<std::endl;
 }
 void zk_base::zk_close(zhandle_t* handle)
 {
