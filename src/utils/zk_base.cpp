@@ -33,6 +33,7 @@ void zk_base::zk_create(zhandle_t* handle,const char* path,const char* value,int
                     const struct ACL_vector* acl,int flags,char* buffer_path,int buffer_len)
 {
     int res = zoo_create(handle,path,value,valuelen,acl,flags,buffer_path,buffer_len);
+
     std::cout <<"zk_create buff:"<<buffer_path<<std::endl;
 
     if(res)
@@ -76,7 +77,6 @@ void zk_base::watcher_global(zhandle_t* handle,int type,int state,const char* pa
     std::cout <<"zookpeer init"<<std::endl;
     std::cout<<"type:"<<type<<std::endl;
     std::cout<<"state:"<<state<<std::endl;
-    std::cout<<"path:"<<path<<std::endl;
     std::cout<<"context:"<<context<<std::endl;
 }
 void zk_base::zk_close(zhandle_t* handle)
