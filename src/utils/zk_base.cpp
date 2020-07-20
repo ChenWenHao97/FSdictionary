@@ -20,7 +20,7 @@ zhandle_t * zk_base::zk_init(const char* host,watcher_fn watcher,
     }
     return handle;
 }
-void zk_exists(zhandle_t* handle,const char* path,int is_watch,struct Stat* state)
+void zk_base::zk_exists(zhandle_t* handle,const char* path,int is_watch,struct Stat* state)
 {
     int res = zoo_exists(handle,path,is_watch,state);
     if(res)
@@ -29,10 +29,12 @@ void zk_exists(zhandle_t* handle,const char* path,int is_watch,struct Stat* stat
         exit(EXIT_FAILURE);
     }
 }
-void zk_create(zhandle_t* handle,const char* path,const char* value,int valuelen,
+void zk_base::zk_create(zhandle_t* handle,const char* path,const char* value,int valuelen,
                     const struct ACL_vector* acl,int flags,char* buffer_path,int buffer_len)
 {
     int res = zoo_create(handle,path,value,valuelen,acl,flags,buffer_path,buffer_len);
+    std::cout <<"zk_create buff:"<<buffer_path<<std::endl;
+
     if(res)
     {
         fprintf(stderr,"zk_create error:create node error\n");
@@ -40,16 +42,26 @@ void zk_create(zhandle_t* handle,const char* path,const char* value,int valuelen
     }
 
 }
-void zk_getchild(zhandle_t* handle,const char* path,int is_watch,struct String_vector* strings)
+void zk_base::zk_getchild(zhandle_t* handle,const char* path,int is_watch,struct String_vector* child_infos)
 {
-    int res = zoo_get_children(handle,path,is_watch,strings);
+    int res = zoo_get_children(handle,path,is_watch,child_infos);
     if(res)
     {
         fprintf(stderr,"zk_getchild error:getchild error\n");
         exit(EXIT_FAILURE);
     }
 }
-void zk_delete(zhandle_t* handle,const char* path,int version)
+void zk_base::zk_wgetchild2(zhandle_t* handle,const char* path,watcher_fn watcher,void* watcherCtx,struct String_vector* child_infos,struct Stat* stat)
+{
+    int res = zoo_wget_children2(handle,path,watcher,watcherCtx,child_infos,stat);
+    if(res)
+    {
+        fprintf(stderr,"zk_wgetchild2 error:getchild error\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+void zk_base::zk_delete(zhandle_t* handle,const char* path,int version)
 {
     int res = zoo_delete(handle,path,version);
     if(res)
@@ -58,17 +70,16 @@ void zk_delete(zhandle_t* handle,const char* path,int version)
         exit(EXIT_FAILURE);
     }
 }
-
-void watcher_global(zhandle_t* handle,int type,int state,const char* path,void* context,int flags)
+//类外定义加static会有二义性，可能表明为仅仅本文件可用
+void zk_base::watcher_global(zhandle_t* handle,int type,int state,const char* path,void* context)
 {
     std::cout <<"zookpeer init"<<std::endl;
     std::cout<<"type:"<<type<<std::endl;
     std::cout<<"state:"<<state<<std::endl;
     std::cout<<"path:"<<path<<std::endl;
     std::cout<<"context:"<<context<<std::endl;
-    std::cout<<"flags:"<<flags<<std::endl;
 }
-void zk_close(zhandle_t* handle)
+void zk_base::zk_close(zhandle_t* handle)
 {
     zookeeper_close(handle);
 }

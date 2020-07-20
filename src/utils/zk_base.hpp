@@ -11,9 +11,10 @@ class zk_base{
         void zk_exists(zhandle_t* handle,const char* path,int is_watch,struct Stat* state);
         void zk_create(zhandle_t* handle,const char* path,const char* value,int valuelen,
                     const struct ACL_vector* acl,int flags,char* buffer_path,int buffer_len);
-        void zk_getchild(zhandle_t* handle,const char* path,int watch,struct String_vector* strings);
+        void zk_getchild(zhandle_t* handle,const char* path,int watch,struct String_vector* child_infos);
+        void zk_wgetchild2(zhandle_t* handle,const char* path,watcher_fn watcher,void* wathcerCtx,struct String_vector* child_infos,struct Stat* stat);
         void zk_delete(zhandle_t* handle,const char* path,int version);
-        void watcher_global(zhandle_t* handle,int type,int state,const char* path,void* context,int flags);
+        static void watcher_global(zhandle_t* handle,int type,int state,const char* path,void* context);
         void zk_close(zhandle_t* handle);
     private:
         int zk_timeout;
