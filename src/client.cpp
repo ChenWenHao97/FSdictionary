@@ -3,10 +3,11 @@
 #include"utils/echo_service.pb.h"
 int main(int argc,char** argv)
 {
-    // if (argc < 2)
-    // {
-    //     std::cout << "input server address and port!" << std::endl;
-    // }
+    if (argc < 2)
+    {
+        std::cout << "please input word!" << std::endl;
+    }
+    std::string word(argv[1]);
     zk_base *base_handle = new zk_base();
     const char *zk_host = "127.0.0.1:2181";
     int timeout = 3000;
@@ -39,10 +40,10 @@ int main(int argc,char** argv)
     char *get_node_info = new char[256];
     int get_node_len;
     base_handle->zk_get(zk_handle, path.c_str(), 1, get_node_info, &get_node_len, &stat);
-    std::cout<<"################################################"<<std::endl;
-    std::cout<<"###############get_node_info####################"<<std::endl;
-    std::cout<<get_node_info<<std::endl;//获取到提供服务的ip地址以及端口
-    const char* server_host = get_node_info;
+    // std::cout<<"################################################"<<std::endl;
+    // std::cout<<"###############get_node_info####################"<<std::endl;
+    // std::cout<<get_node_info<<std::endl;
+    const char* server_host = get_node_info;//获取到提供服务的ip地址以及端口
 
 
 
@@ -64,9 +65,8 @@ int main(int argc,char** argv)
  
     // 定义和填充调用方法的请求消息
     fs::EchoRequest request;
-   std::cout<<"################################################"<<std::endl;
-    std::cout<<"###############send client message####################"<<std::endl;
-    request.set_message("send from  client message");
+
+    request.set_message(word);
  
     // 定义方法的回应消息，会在调用返回后被填充
     fs::EchoResponse response;
@@ -85,8 +85,7 @@ int main(int argc,char** argv)
         SLOG(ERROR, "request failed: %s", controller.ErrorText().c_str());
     }
    std::cout<<"################################################"<<std::endl;
-    std::cout<<"###############get client message####################"<<std::endl;
-    std::cout<<"echo message:"<<response.message()<<std::endl;
+    std::cout<<"translate result:"<<response.message()<<std::endl;
 
     delete base_handle;
     delete get_node_info;

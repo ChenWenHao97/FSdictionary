@@ -20,7 +20,7 @@ INCPATH=-I$(SOFA_PBRPC)/include -I$(PROTOBUF_DIR)/include \
 CXXFLAGS += $(OPT) -pipe -W -Wall -fPIC -D_GNU_SOURCE -D__STDC_LIMIT_MACROS $(INCPATH) -I/usr/local/include/zookeeper -I/Users/cwh/home/pbrpc/src/sofa/pbrpc
 
 LIBRARY=$(SOFA_PBRPC)/lib/libsofa-pbrpc.a $(PROTOBUF_DIR)/lib/libprotobuf.a $(SNAPPY_DIR)/lib/libsnappy.a
-LDFLAGS += -L$(ZLIB_DIR)/lib -lpthread -lz -DTHREADED  -lzookeeper_mt 
+LDFLAGS +=  -lpthread -lz -DTHREADED  -lzookeeper_mt  -L/usr/local/lib -lhiredis
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
@@ -58,7 +58,7 @@ check_depends:
 
 rebuild: clean all
 
-server: $(PROTO_OBJ) server_can_selection.o utils/zk_base.o
+server: $(PROTO_OBJ) server_can_selection.o utils/zk_base.o utils/Redis.o
 	$(CXX) $^ -o $@ $(LIBRARY) $(LDFLAGS)
 
 client: $(PROTO_OBJ) client.o utils/zk_base.o

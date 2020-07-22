@@ -1,34 +1,38 @@
 #include "utils/common.hpp"
 #include "utils/zk_base.hpp"
-#include"utils/echo_service.pb.h"
+#include "utils/Redis.hpp"
+#include "utils/echo_service.pb.h"
 void get_node_name(char *buf, char *node_name);
 void is_leader(zhandle_t *zk_handle, const char *father_node_name, const char *child_node, const char *set_registry_info);
 void election_child_watcher(zhandle_t *zk_handle, int type, int state, const char *path, void *watcherCtx);
-struct watcher_node_info{
+std::string get_translate(std::string key);
+struct watcher_node_info
+{
     zhandle_t *handle;
     std::string father_node_name;
     std::string child_node_name;
     std::string set_registry_info;
 };
-class EchoServerImpl:public fs::EchoServer{
-    public:
-        EchoServerImpl(){}
-        virtual ~EchoServerImpl(){}
-    private:
-        virtual void Echo(google::protobuf::RpcController* controller,
-                            const fs::EchoRequest* request,
-                            fs::EchoResponse* response,
-                            google::protobuf::Closure* done)
-        {
-            sofa::pbrpc::RpcController* cntl = 
-                static_cast<sofa::pbrpc::RpcController*>(controller);
-                std::cout<<"################################################"<<std::endl;
-                SLOG(NOTICE,"Echo():request message from %s:%s",
-                    cntl->RemoteAddress().c_str(),request->message().c_str());
-                response->set_message("server response message:"+request->message());
-                done->Run();//通知rpc系统服务完成，出发发送response
-        }
+class EchoServerImpl : public fs::EchoServer
+{
+public:
+    EchoServerImpl() {}
+    virtual ~EchoServerImpl() {}
 
+private:
+    virtual void Echo(google::protobuf::RpcController *controller,
+                      const fs::EchoRequest *request,
+                      fs::EchoResponse *response,
+                      google::protobuf::Closure *done)
+    {
+        sofa::pbrpc::RpcController *cntl =
+            static_cast<sofa::pbrpc::RpcController *>(controller);
+        SLOG(NOTICE, "Echo():request message from %s:%s",
+             cntl->RemoteAddress().c_str(), request->message().c_str());
+        
+        response->set_message(get_translate(request->message()));
+        done->Run(); //通知rpc系统服务完成，出发发送response
+    }
 };
 int main(int argc, char **argv)
 {
@@ -38,7 +42,7 @@ int main(int argc, char **argv)
     }
     zk_base *base_handle = new zk_base();
     const char *zk_host = "127.0.0.1:2181";
-    const char *server_host=argv[1];
+    const char *server_host = argv[1];
     int timeout = 300;
     const char *context = "zk_selection";
     zoo_set_debug_level(ZOO_LOG_LEVEL_WARN);
@@ -58,10 +62,10 @@ int main(int argc, char **argv)
                            buf,
                            256);
     char *child_node_name = new char[256];
-    get_node_name(buf, child_node_name);//获取创建的子节点名字
+    get_node_name(buf, child_node_name); //获取创建的子节点名字
     const char *set_registry_info = server_host;
 
-    is_leader(zk_handle, father_node_name.c_str(), child_node_name, set_registry_info);//判断是否为leader节点
+    is_leader(zk_handle, father_node_name.c_str(), child_node_name, set_registry_info); //判断是否为leader节点
     struct String_vector child_infos;
     struct watcher_node_info node_info;
     node_info.handle = zk_handle;
@@ -79,15 +83,15 @@ int main(int argc, char **argv)
     options.work_thread_num = 2;
     sofa::pbrpc::RpcServer rpc_server(options);
 
-    if(!rpc_server.Start(server_host))
+    if (!rpc_server.Start(server_host))
     {
-        SLOG(ERROR,"start server failed");
+        SLOG(ERROR, "start server failed");
         return EXIT_FAILURE;
     }
-    fs::EchoServer* echo_service = new EchoServerImpl();
-    if(!rpc_server.RegisterService(echo_service))
+    fs::EchoServer *echo_service = new EchoServerImpl();
+    if (!rpc_server.RegisterService(echo_service))
     {
-        SLOG(ERROR,"register server failed");
+        SLOG(ERROR, "register server failed");
         return EXIT_FAILURE;
     }
     rpc_server.Run();
@@ -100,7 +104,6 @@ int main(int argc, char **argv)
     delete child_node_name;
     return EXIT_SUCCESS;
 }
-
 
 void get_node_name(char *buf, char *node_name)
 {
@@ -174,4 +177,19 @@ void election_child_watcher(zhandle_t *zk_handle, int type, int state, const cha
     base_handle->zk_wgetchild2(para->handle, para->father_node_name.c_str(), election_child_watcher, watcherCtx, &child_infos, &stat);
     is_leader(para->handle, (para->father_node_name).c_str(), (para->child_node_name).c_str(), (para->set_registry_info).c_str());
     delete base_handle;
+}
+std::string get_translate(std::string key)
+{
+    std::cout << "################before new################" << std::endl;
+    Redis *rd_handle = new Redis();
+    std::cout << "################before rd_connect################" << std::endl;
+    if (!rd_handle->rd_connect("127.0.0.1", 6379))
+    {
+        std::cout << "server create rd_connect error" << std::endl;
+    }
+    std::cout << "################before rd_get################" << std::endl;
+    std::string rd_value = rd_handle->rd_get(key);
+    std::cout << "#################after rd_get###############" << std::endl;
+    std::cout << "get redis value:" << rd_value << std::endl;
+    return rd_value;
 }

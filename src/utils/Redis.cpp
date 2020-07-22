@@ -1,7 +1,9 @@
 #include"Redis.hpp"
-Redis::Redis()
+#include"common.hpp"
+Redis::Redis():handle(NULL)
 {
-
+    printf("new redis\n");
+    std::cout <<"new redis success!!!!"<<std::endl;
 }
 Redis::~Redis()
 {
@@ -11,7 +13,7 @@ Redis::~Redis()
 bool Redis::rd_connect(std::string host,int port)
 {
     this->handle = redisConnect(host.c_str(),port);
-    if(this->handle !=NULL && this->handle->err)
+    if(this->handle==NULL ||  this->handle->err)
     {
         std::cout<<"redis connect error:"<<this->handle->errstr<<std::endl;
         return false;

@@ -1,6 +1,7 @@
 #ifndef REDIS_HPP
 #define REDIS_HPP
-#include"common.hpp"
+#include<hiredis/hiredis.h>
+#include<string>
 class Redis{
     public:
         Redis();
