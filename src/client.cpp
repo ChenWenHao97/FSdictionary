@@ -87,6 +87,9 @@ int main(int argc,char** argv)
    std::cout<<"################################################"<<std::endl;
     std::cout<<"###############get client message####################"<<std::endl;
     std::cout<<"echo message:"<<response.message()<<std::endl;
+
+    delete base_handle;
+    delete get_node_info;
     return EXIT_SUCCESS;
 
 }

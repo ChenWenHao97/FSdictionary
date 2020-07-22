@@ -94,7 +94,10 @@ int main(int argc, char **argv)
     rpc_server.Stop();
 
     base_handle->zk_close(zk_handle);
-    
+    delete echo_service;
+    delete base_handle;
+    delete buf;
+    delete child_node_name;
     return EXIT_SUCCESS;
 }
 
@@ -158,6 +161,8 @@ void is_leader(zhandle_t *zk_handle, const char *father_node_name, const char *c
     // std::cout<<"stat.version"<<stat.version<<std::endl;修改的版本好，就是dataversion
     //将registry节点的ip地址进行修改，让它时刻保持最新的leader ip；
     base_handle->zk_set(zk_handle, path.c_str(), set_registry_info, strlen(set_registry_info), stat.version);
+    delete base_handle;
+    delete get_node_info;
 }
 void election_child_watcher(zhandle_t *zk_handle, int type, int state, const char *path, void *watcherCtx)
 {
@@ -168,4 +173,5 @@ void election_child_watcher(zhandle_t *zk_handle, int type, int state, const cha
     //重新监听
     base_handle->zk_wgetchild2(para->handle, para->father_node_name.c_str(), election_child_watcher, watcherCtx, &child_infos, &stat);
     is_leader(para->handle, (para->father_node_name).c_str(), (para->child_node_name).c_str(), (para->set_registry_info).c_str());
+    delete base_handle;
 }
