@@ -1,6 +1,7 @@
 #ifndef COMMON_HPP
 #define COMMON_HPP
 #include<iostream>
+#include<hiredis/hiredis.h>
 #include<cstdio>
 #include<string>
 #include<cstring>
