@@ -1,0 +1,46 @@
+Date : 2020-07-22 18:19:14
+Directory : /Users/cwh/home/FSdictionary
+Total : 17 files,  1418 codes, 95 comments, 228 blanks, all 1741 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         10 |      1,280 |         81 |        209 |      1,570 |
+| XML      |          6 |         93 |          0 |          0 |         93 |
+| Makefile |          1 |         45 |         14 |         19 |         78 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                      | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                         |         17 |      1,418 |         95 |        228 |      1,741 |
+| .idea                                                     |          6 |         93 |          0 |          0 |         93 |
+| src                                                       |         11 |      1,325 |         95 |        228 |      1,648 |
+| src/utils                                                 |          8 |      1,050 |         51 |        179 |      1,280 |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                  | language | code       | comment    | blank      | total      |
++-----------------------------------------------------------+----------+------------+------------+------------+------------+
+| /Users/cwh/home/FSdictionary/.idea/FSdictionary.iml       | XML      |          8 |          0 |          0 |          8 |
+| /Users/cwh/home/FSdictionary/.idea/encodings.xml          | XML      |          6 |          0 |          0 |          6 |
+| /Users/cwh/home/FSdictionary/.idea/misc.xml               | XML      |          6 |          0 |          0 |          6 |
+| /Users/cwh/home/FSdictionary/.idea/modules.xml            | XML      |          8 |          0 |          0 |          8 |
+| /Users/cwh/home/FSdictionary/.idea/vcs.xml                | XML      |          6 |          0 |          0 |          6 |
+| /Users/cwh/home/FSdictionary/.idea/workspace.xml          | XML      |         59 |          0 |          0 |         59 |
+| /Users/cwh/home/FSdictionary/src/client.cpp               | C++      |         58 |         20 |         16 |         94 |
+| /Users/cwh/home/FSdictionary/src/makefile                 | Makefile |         45 |         14 |         19 |         78 |
+| /Users/cwh/home/FSdictionary/src/server_can_selection.cpp | C++      |        172 |         10 |         14 |        196 |
+| /Users/cwh/home/FSdictionary/src/utils/Redis.cpp          | C++      |         33 |          1 |          0 |         34 |
+| /Users/cwh/home/FSdictionary/src/utils/Redis.hpp          | C++      |         16 |          0 |          0 |         16 |
+| /Users/cwh/home/FSdictionary/src/utils/common.hpp         | C++      |         10 |          0 |          0 |         10 |
+| /Users/cwh/home/FSdictionary/src/utils/echo_service.pb.cc | C++      |        552 |         16 |         94 |        662 |
+| /Users/cwh/home/FSdictionary/src/utils/echo_service.pb.h  | C++      |        306 |         29 |         79 |        414 |
+| /Users/cwh/home/FSdictionary/src/utils/testredis.cpp      | C++      |         14 |          0 |          2 |         16 |
+| /Users/cwh/home/FSdictionary/src/utils/zk_base.cpp        | C++      |         92 |          5 |          4 |        101 |
+| /Users/cwh/home/FSdictionary/src/utils/zk_base.hpp        | C++      |         27 |          0 |          0 |         27 |
+| Total                                                     |          |      1,418 |         95 |        228 |      1,741 |
++-----------------------------------------------------------+----------+------------+------------+------------+------------+
