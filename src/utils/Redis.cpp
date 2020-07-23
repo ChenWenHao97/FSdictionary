@@ -20,7 +20,6 @@ std::string Redis::rd_get(std::string key)
 {
  
         redisReply *reply = (redisReply *)redisCommand(this->handle, "GET %s", key.c_str());
-        // std::cout<<"after rd_get "<<std::endl;
         if(reply->len ==0)
         {
             std::cout<<"rd_get null"<<std::endl;
@@ -30,14 +29,6 @@ std::string Redis::rd_get(std::string key)
         // 释放redisCommand执行后返回的的redisReply所占用的内存
         freeReplyObject(reply);
         return value;
-   
-    // if(!(reply->type == REDIS_REPLY_STATUS))
-    // if(reply->type == REDIS_REPLY_ERROR)
-    // if(reply == "nil")
-    // {
-    //     std::cout<<"rd_get func error"<<std::endl;
-    //     return "";
-    // }
 }
 void Redis::rd_set(std::string key, std::string value)
 {
