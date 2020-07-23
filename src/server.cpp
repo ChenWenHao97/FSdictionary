@@ -29,8 +29,11 @@ private:
             static_cast<sofa::pbrpc::RpcController *>(controller);
         SLOG(NOTICE, "Echo():request message from %s:%s",
              cntl->RemoteAddress().c_str(), request->message().c_str());
-        
-        response->set_message(get_translate(request->message()));
+        std::string translate_result = get_translate(request->message());
+        if (translate_result == "")
+            response->set_message("sorry,this world does not exist!");
+        else
+            response->set_message(translate_result);
         done->Run(); //通知rpc系统服务完成，出发发送response
     }
 };
@@ -137,7 +140,7 @@ void is_leader(zhandle_t *zk_handle, const char *father_node_name, const char *c
     std::cout << "this is " << child_node << std::endl;
     std::cout << "I am a leader" << std::endl;
 
-    std::cout << "child lists:" << std::endl;
+    // std::cout << "child lists:" << std::endl;
     std::string reg_node;
     for (int i = 0; i < child_infos.count; i++)
     {
@@ -180,16 +183,14 @@ void election_child_watcher(zhandle_t *zk_handle, int type, int state, const cha
 }
 std::string get_translate(std::string key)
 {
-    std::cout << "################before new################" << std::endl;
+    // std::cout << "################before new################" << std::endl;
     Redis *rd_handle = new Redis();
-    std::cout << "################before rd_connect################" << std::endl;
+    // std::cout << "################before rd_connect################" << std::endl;
     if (!rd_handle->rd_connect("127.0.0.1", 6379))
     {
         std::cout << "server create rd_connect error" << std::endl;
     }
-    std::cout << "################before rd_get################" << std::endl;
-    std::string rd_value = rd_handle->rd_get(key);
-    std::cout << "#################after rd_get###############" << std::endl;
-    std::cout << "get redis value:" << rd_value << std::endl;
-    return rd_value;
+    // std::cout << "################before rd_get################" << std::endl;
+        return rd_handle->rd_get(key);
+      
 }

@@ -1,3 +1,6 @@
 server
 client
 a.out
+.idea
+.vscode
+.VSCodeCounter
